@@ -1,0 +1,36 @@
+body {
+	color: grey;
+	background-color: grey;
+}
+#header {
+	color: white;
+	font-family: helvetica;
+	font-size: 35px;
+	margin: 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+container {
+	color: white;
+}
+.font {
+	color: white;
+	font-family: helvetica;
+}
+#error {
+  color: darkred;
+}
+#instr {
+	font-size: 20px
+}
+
+.labels {
+	font-size: 26px;
+}
+
+#blanks { 
+	color: white;
+	font-family: helvetica;
+	font-size: 32px;
+ }
+ 

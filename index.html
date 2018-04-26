@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<title>Hangman-Game</title>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  </head>
+
+  <body>
+
+  	<header>
+  		<h2 id="header">This is Hangman!</h2>
+  	</header>
+
+	<container id="box1">
+	  	<p id="instr" class="font">Guess the name of the band, you have 10 chances, spaces count. Enter letter to begin!</p>
+	</container>
+
+	<container>
+<br>
+<br>
+<br>
+<br>
+	</container>
+	
+	<container id="box2">
+
+		<div class="statConts">
+			<div id="error" class="labels font"></div>
+			<h3 class="labels font">Chances: <span id="lives" class="font"></span></h3>
+		</div>
+
+		<div class="statConts">
+			<h3 class="labels font">Word <span id="chars" class="labels font"></span>: <span id="blanks" ></span></h3>
+		</div>
+
+		<div class="statConts">
+			<h3 class="labels font">Letters used: <span id="guesses" class="font"></span></h3>
+		</div>
+
+	</container>
+
+  </body>
+  <script>
+  	var wordBank = [ 
+  	"metallica", 
+  	"linkin park", 
+  	"smashing pumpkins", 
+  	"nirvana", 
+  	"radiohead", 
+  	"sublime", 
+  	"the offspring", 
+  	"anberlin", 
+  	"weezer", 
+  	"red hot chili peppers"]
+
+  	var lives = 10;
+  	var score = 0;
+  	var repeat = false;
+  	var result = false;
+  	var answer = true;
+  	var wordSame = false;
+  	var guessedBank = [];
+  	var numRight = 0;
+  	var vocab = "****************************************************";
+  	
+ 	function newWord() {
+ 		var word = "";
+  		var word = wordBank[Math.floor(Math.random()*wordBank.length)];
+  		return word;
+  	};
+
+  	var word = newWord();
+
+  	function reStart() {
+  		if (blankArr == wordArr || lives == 0) {
+		newWord();
+		};
+	};
+
+	newWord();
+	reStart();
+
+  	$("#chars").html("(" + word.length + " letters)");
+  	$("#lives").html(lives);
+
+  	function countChars() {
+  		for (i = 0; i < word.length; i++);
+  		var numOblanks = i;
+    return numOblanks;
+}
+	var numOblanks = countChars();
+
+	console.log(numOblanks);
+	console.log(word);
+
+	function countBlanks() {
+		countChars();
+			i = 0
+			var blank = "_";
+			var blankSpace = "";
+			while (i < numOblanks) {
+				blankSpace = blank + blankSpace;
+				i++;
+			}
+			return blankSpace;
+	}
+	var blankSpace = countBlanks();
+console.log(blankSpace);
+
+	var blankArr = blankSpace.split("");
+	var wordArr = word.split("");
+	var vocabArr = vocab.split("");
+
+console.log(blankArr);
+console.log(wordArr);
+
+$("#blanks").html(blankArr);
+
+	document.onkeyup = function(event) {
+		var answer = false
+		var userGuess = event.key;
+		var wrongCt = 0;
+		var repeat = false;
+		var rep = false;
+		var usedLet = false;
+		(vocabArr).push(event.key);
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+console.log("userGuess: " + userGuess);
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+				if (repeat == false) {
+					if (answer == false) {
+						lives--;
+						wrongCt ++;
+					};
+
+					for (var i = 0; i < word.length; i++) {
+						if (event.key == wordArr[i]) {
+							var answer = true;
+							blankArr[i] = event.key; 
+							$("#blanks").html(blankArr);
+							console.log(blankArr);
+							console.log("Repeat status: " + repeat); 
+						};
+
+					};
+				};
+
+				for (var i = 0; i < word.length; i++) {
+					if (rep == false) {
+						if (event.key == wordArr[i]) {
+							numRight++;
+							wrongCt--;
+							lives++;
+						};
+					};
+						if (event.key == blankArr[i]) {
+							rep = true;
+					};
+				};
+
+				for (i = 0; i < 30; i++) {
+					if (event.key == vocabArr[i]) {
+						var usedLet = true;
+						var repeat = true;
+					};
+					if  (event.key == guessedBank[i]) {
+						var usedLet = true;
+						var repeat = true;
+					};
+				};
+
+				if (usedLet == false && repeat == false) {
+					if (event.key !== wordArr) {
+						(guessedBank).push(event.key);
+					};
+				};
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+console.log("VocabArr: " + vocabArr);
+console.log("Repeat status: " + repeat);
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+
+				if (repeat == false) {
+				$("#error").html("");
+		console.log("Repeat status: " + repeat);
+				};
+
+				if (repeat == true) {
+				$("#error").html("Pick a new letter!");
+				lives++;
+				
+		console.log("Repeat status: " + repeat);
+				};
+
+				$("#lives").html(lives);
+				$("#guesses").html(guessedBank);
+			
+				function compareWords() {
+ 					if (!wordArr) {
+						return false;
+					}
+  					for (var i = 0, l = blankArr.length; i < l; i++) {
+    					if (blankArr[i] instanceof Array && wordArr[i] instanceof Array) {
+      						if (!blankArr[i].compare(wordArr[i])) {
+        						return false;
+        					}
+   						 }
+      					else if (blankArr[i] !== wordArr[i]) {
+      						return false;
+   						}
+					}
+						return true;
+				}
+				var wordSame = compareWords()
+
+console.log("Words same: " + wordSame);
+
+				if (wordSame == true) {
+					$("#error").html("Congratulations!!! Now refresh page...");
+					newWord();
+					};
+
+				if (lives <= 0) {
+					$("#error").html("LOOOOSSSSEERRR!!! Now refresh page...");
+					newWord();
+					};
+
+				var repeat = false;
+				var result = false;
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+console.log("Used Bank: " + guessedBank);
+console.log("Correct Characters: " + numRight);
+console.log("wrong Characters: " + wrongCt);
+// <~~~~~~~~CONSOLE TESTS~~~~~~~~~>
+			};
+
+  </script>
+
+</html>
+
+
+
+
